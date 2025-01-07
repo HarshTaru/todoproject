@@ -33,9 +33,14 @@ class TaskManager:
         Raises:
             ValueError: If description or due_date is invalid (handled by the Task class).
         """
-        task = Task(description, due_date)
-        self.tasks.append(task)
-        return task
+        try:
+            task = Task(description, due_date)
+            self.tasks.append(task)
+            return task
+        except ValueError as e:
+            # Handle specific errors related to invalid task attributes
+            print(f"Error adding task: {e}")
+            raise  # Re-raise the exception for further handling
 
     def mark_task_as_complete(self, task_id):
         """
@@ -50,11 +55,16 @@ class TaskManager:
         Raises:
             ValueError: If the task with the given ID is not found.
         """
-        task = self._find_task_by_id(task_id)
-        if not task:
-            raise ValueError("Task not found.")
-        task.completed = True
-        return task
+        try:
+            task = self._find_task_by_id(task_id)
+            if not task:
+                raise ValueError("Task not found.")
+            task.completed = True
+            return task
+        except ValueError as e:
+            # Handle task not found error
+            print(f"Error marking task as complete: {e}")
+            raise  # Re-raise the exception
 
     def list_tasks(self, filter_by=None):
         """
@@ -69,11 +79,16 @@ class TaskManager:
         Returns:
             list: A list of tasks filtered by the specified completion status.
         """
-        if filter_by == "completed":
-            return [task for task in self.tasks if task.completed]
-        elif filter_by == "pending":
-            return [task for task in self.tasks if not task.completed]
-        return self.tasks
+        try:
+            if filter_by == "completed":
+                return [task for task in self.tasks if task.completed]
+            elif filter_by == "pending":
+                return [task for task in self.tasks if not task.completed]
+            return self.tasks
+        except Exception as e:
+            # General exception handling in case of unexpected errors
+            print(f"Error listing tasks: {e}")
+            return []
 
     def delete_task(self, task_id):
         """
@@ -88,11 +103,16 @@ class TaskManager:
         Raises:
             ValueError: If the task with the given ID is not found.
         """
-        task = self._find_task_by_id(task_id)
-        if not task:
-            raise ValueError("Task not found.")
-        self.tasks.remove(task)
-        return True
+        try:
+            task = self._find_task_by_id(task_id)
+            if not task:
+                raise ValueError("Task not found.")
+            self.tasks.remove(task)
+            return True
+        except ValueError as e:
+            # Handle task not found error
+            print(f"Error deleting task: {e}")
+            raise  # Re-raise the exception
 
     def _find_task_by_id(self, task_id):
         """
@@ -104,4 +124,9 @@ class TaskManager:
         Returns:
             Task: The task object if found, or None if not found.
         """
-        return next((task for task in self.tasks if task.id == task_id), None)
+        try:
+            return next((task for task in self.tasks if task.id == task_id), None)
+        except Exception as e:
+            # Handle any unexpected errors in finding a task
+            print(f"Error finding task: {e}")
+            return None
