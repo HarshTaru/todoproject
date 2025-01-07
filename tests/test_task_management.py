@@ -1,7 +1,8 @@
 import unittest
 from datetime import date
-from src.task_manager import TaskManager
-from src.task_model import Task
+
+from controllers.task_manager import TaskManager
+from models.task_model import Task
 
 class TestTaskManager(unittest.TestCase):
     """

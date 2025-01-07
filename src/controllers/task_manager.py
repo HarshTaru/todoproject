@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from task_model import Task
+from models.task_model import Task
 
 class TaskManager:
     """
